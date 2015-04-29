@@ -40,12 +40,43 @@ class Gmap extends CI_Controller {
 		$this->googlemaps->initialize($config);
 		$data['map'] = $this->googlemaps->create_map();
 
-		$this->load->view('gmap/v_get_geo', $data);
+		$this->load->view('v_get_geo', $data);
 	}
 
 	public function jsmap(){
 		$data = $this->m_gmap->get_marker();
-		$this->load->view('jsmap/v_jsmap', $data);
+		$this->load->view('v_jsmap', $data);
+	}
+
+	public function find_map(){
+		$data = null;
+		$this->load->view('v_find_map', $data);
+	}
+
+	public function add_map(){
+		$data = array();
+		$lat=($_GET['obj']['lat'][0]);
+		$lng=($_GET['obj']['lng'][0]);
+		$address=($_GET['obj']['address'][0]);
+
+
+		$var = array(
+		  'lat' => $lat,
+		  'lng' => $lng,
+		  'address' => $address,
+		  'name' => $address
+		);
+
+		if(!is_null($this->m_gmap->add_marker($var))) {
+			$data['code'] = 1;
+			$data['info'] = "add successfully";
+		} 
+		else {
+			$data['code'] = 0;
+			$data['info'] = "add not successfully";
+		}
+		
+		echo json_encode($data);
 	}
 }
 

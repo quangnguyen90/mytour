@@ -33,6 +33,17 @@ class M_gmap extends CI_Model {
 		return $data;
 	}
 
+	public 	function add_marker($data)
+	{
+		if ($this->db->insert($this->tableMarker, $data)) {
+			$data['id'] = $this->db->insert_id();
+
+			return $data;
+		} else {
+			return NULL;
+		}
+	}
+
 }
 
 /* End of file m_gmap.php */
