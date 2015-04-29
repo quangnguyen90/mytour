@@ -111,6 +111,26 @@ class M_tour extends CI_Model {
 
 		return $query->num_rows() > 0 ? $query->result() : NULL;
 	}
+
+	public 	function add_cart($data)
+	{
+		if ($this->db->insert($this->tableCart, $data)) {
+			$data['id'] = $this->db->insert_id();
+
+			return $data['id'];
+		} else {
+			return NULL;
+		}
+	}
+
+	public function update_cart($data, $id){
+		$this->db->where('id', $id);
+		if ($this->db->update($this->tableCart, $data)) {
+			return $id;
+		} else {
+			return NULL;
+		}
+	}
 }
 
 /* End of file M_tour1.php */

@@ -87,14 +87,19 @@ class Tour extends CI_Controller {
 	public function addCart(){
 		$sg3 = $this->uri->segment(3);
 		$sg4 = $this->uri->segment(4);
-
 		if($sg4 == 'x'){
 			$obj = array(
 				'json' => $sg3
 			);
-			$this->db->insert('carts', $obj);
-			$id=$this->db->insert_id();
-			redirect('http://localhost/mytour/index.php/tour/show/'.$this->m_tour->first_place_of_tour($sg3).'/'.$id,'refresh');
+			if(!is_null($id_add = $this->m_tour->add_cart($obj))) {
+				$id = $id_add;	
+				redirect('http://localhost/mytour/index.php/tour/show/'.$this->m_tour->first_place_of_tour($sg3).'/'.$id,'refresh');
+				var_dump($id);
+			}
+			else {
+				$id = "";
+				redirect('tour/show/1/x');
+			}
 		}
 		else {
 			$this->db->where('id', $sg4);
@@ -102,7 +107,8 @@ class Tour extends CI_Controller {
 			$obj = array(
 				'json' => $json.','.$sg3
 			);
-			$this->db->update('carts', $obj);
+
+			$id_update = $this->m_tour->update_cart($obj, $sg4);
 			redirect('http://localhost/mytour/index.php/tour/show/'.$this->m_tour->first_place_of_tour($sg3).'/'.$sg4,'refresh');
 		}
 	}
